@@ -29,7 +29,7 @@ class LocalSetup extends SymfonyCommand implements ContainerAwareInterface {
     $this->waypoint_manager_patches = $this->container->get('waypoint_manager.patches');
   }
 
-  protected function execute(InputInterface $input, OutputInterface $output) {
+  protected function execute(InputInterface $input, OutputInterface $output): int {
     $this->setServices();
 
     // Check git is clean.
@@ -62,7 +62,7 @@ class LocalSetup extends SymfonyCommand implements ContainerAwareInterface {
         $output->writeln("Afterwards, you should use the update command to get new patches from drupal.org.");
       }
 
-      return;
+      return 1;
     }
 
     // If the master branch is not current, abort.
@@ -88,7 +88,7 @@ class LocalSetup extends SymfonyCommand implements ContainerAwareInterface {
     // If no patches, we're done.
     if (empty($patches)) {
       $output->writeln("There are no patches to apply.");
-      return;
+      return 0;
     }
 
     // Output the patches.
@@ -121,6 +121,7 @@ class LocalSetup extends SymfonyCommand implements ContainerAwareInterface {
         '!patchname' => $patch->getPatchFilename(),
       ]));
     }
+    return 0;
   }
 
 }
